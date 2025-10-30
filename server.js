@@ -9,6 +9,19 @@ const bodyParser = require('body-parser');
 
 app.use(bodyParser.json()); // to parse JSON bodies
 
+// Firebase Config endpoint
+app.get('/api/firebase-config', (req, res) => {
+  res.json({
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID
+  });
+});
+
 // Tumblr data will be fetched here
 // Tumblr set to fetch multiple blogs
 const TUMBLR_API_KEY = process.env.TUMBLR_API_KEY;
@@ -428,3 +441,4 @@ app.get('/about.html', (req, res) =>{
 app.listen(PORT, () => {
   console.log(`✅ Surver is running at http://localhost:${PORT}`);
 });
+
