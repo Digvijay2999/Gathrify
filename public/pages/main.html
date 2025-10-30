@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gathrify Feed</title>
+  <link rel="icon" href="../images/image.png" type="image/png" />
+  <link rel="stylesheet" href="../styles/main.css"/>   
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a1521852c2.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">
+      <a href="main.html">
+        <img src="../images/logo1.png" alt="Gathrify Logo">
+      </a>
+    </div>
+
+    <div id="select-wrapper">
+      <div class="select-container">
+        <select name="platform" id="platform">
+          <option value="">-- Choose a platform --</option>
+          <option value="youtube">YouTube</option>
+          <option value="reddit">Reddit</option>
+          <option value="news">News</option>
+          <option value="tumblr">Tumblr</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="nav-icons">
+      <i class="fa-solid fa-bell fa-lg" id="bellIcon" style="color: #050505;"></i>
+      <img id="nav-profile-pic" src="../images/default-avatar.png" alt="Profile" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; cursor: pointer;" />
+      <i class="fa-solid fa-bars fa-lg" id="menu-toggle" style="color: #000000;"></i>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="main.html">Home</a>
+    <a href="about.html">About Us</a>
+    <a href="terms.html">Terms Of Service</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="https://t.me/Gathrify">Contact Us</a>
+  </div>
+
+  <div class="hide-scrollbar"></div>
+
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <a href="#" data-page="home"><i class="fa-solid fa-house fa-lg"></i><span>Home</span></a>
+      <a href="#" data-page="reddit"><i class="fa-brands fa-reddit fa-lg"></i><span>Reddit</span></a>
+      <a href="#" data-page="tumblr"><i class="fa-brands fa-tumblr fa-lg"></i><span>Tumblr</span></a>
+      <a href="#" data-page="shorts"><i class="fa-solid fa-film fa-lg"></i><span>Shorts</span></a>
+      <a href="#" data-page="videos"><i class="fa-solid fa-video fa-lg"></i><span>Videos</span></a>
+      <a href="#" data-page="news"><i class="fa-solid fa-newspaper fa-lg"></i><span>News</span></a>
+      <a href="#" data-page="wallpapers"><i class="fa-solid fa-images fa-lg"></i><span>Wallpapers</span></a>
+      <a href="#" data-page="about"><i class="fa-solid fa-address-card fa-lg"></i><span>About Us</span></a>
+    </div>
+    
+
+    <!-- Feed Content -->
+    <div class="feed-container" id="feed-container">
+      <!-- Posts will be injected here -->
+    </div>
+  </div>
+  
+  
+
+  <!-- Profile Popup -->
+  <div class="popup" id="profile-popup">
+    <div class="popup-content">
+      <img id="profile-pic" src="../images/default-avatar.png" alt="Profile Picture" class="profile-avatar-img" />
+      <p id="profile-name">User Name</p>
+      <p id="profile-email">user@example.com</p>
+      <button id="logoutBtn">Logout</button>
+      <button id="set-password-btn">Set Password</button>
+    </div>
+  </div>
+
+  <!-- Notification Popup -->
+  <div class="popup" id="notification-popup">
+    <div class="popup-content">
+      <p><strong>No new notifications.</strong></p>
+    </div>
+  </div>
+
+  <!-- Firebase Auth & Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import {
+      getAuth,
+      signOut,
+      onAuthStateChanged,
+      updatePassword
+    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBXTdfKN9ZhC-INQVukxB7Twyh1trCZf8A",
+      authDomain: "gathrify-644e8.firebaseapp.com",
+      projectId: "gathrify-644e8",
+      storageBucket: "gathrify-644e8.appspot.com",
+      messagingSenderId: "703401797587",
+      appId: "1:703401797587:web:bacd2ac2439de36e54b126",
+      measurementId: "G-R4NJGJJ34J"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user || !user.emailVerified) {
+        window.location.href = "login.html";
+      } else {
+        const email = user.email;
+        const displayName = user.displayName || email.split('@')[0];
+        const profilePic = document.getElementById("profile-pic");
+        const navProfilePic = document.getElementById("nav-profile-pic");
+
+        document.getElementById("profile-name").textContent = displayName;
+        document.getElementById("profile-email").textContent = email;
+
+        const photo = user.photoURL || "../images/default-avatar.png";
+
+        profilePic.src = photo;
+        profilePic.alt = displayName;
+
+        navProfilePic.src = photo;
+        navProfilePic.alt = displayName;
+
+        // Toggle profile popup
+        navProfilePic.addEventListener("click", () => {
+          const popup = document.getElementById("profile-popup");
+          popup.style.display = popup.style.display === "block" ? "none" : "block";
+        });
+
+        // Set password
+        document.getElementById("set-password-btn").addEventListener("click", () => {
+          const newPassword = prompt("Enter your new password:");
+          if (newPassword) {
+            updatePassword(user, newPassword)
+              .then(() => alert("Password set successfully!"))
+              .catch((error) => {
+                console.error("Password update error:", error);
+                if (error.code === "auth/requires-recent-login") {
+                  alert("Please log out and log in again to set your password.");
+                } else {
+                  alert("Error setting password: " + error.message);
+                }
+              });
+          }
+        });
+
+        // Logout
+        document.getElementById("logoutBtn").addEventListener("click", (e) => {
+          e.preventDefault();
+          signOut(auth)
+            .then(() => window.location.href = "login.html")
+            .catch((error) => {
+              console.error("Logout error:", error);
+              alert("Error during logout.");
+            });
+        });
+      }
+    });
+    
+  const pages = {
+    home: `
+    `,
+    reddit: `
+    `,
+    tumblr: `
+    `,
+    shorts: `
+    `,
+    videos: `
+    `,
+    news: `
+    `,
+    wallpapers: `
+      
+    `,
+    about: `
+      <h2> About Us</h2>
+      <p>Gathrify is your all-in-one content hub to gather posts from multiple platforms into one place.</p>
+    `
+  };
+
+  document.querySelectorAll('.sidebar a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const page = link.getAttribute('data-page');
+      const content = pages[page] || "<h2>🚫 Not Found</h2><p>Content is not available.</p>";
+      document.getElementById('feed-container').innerHTML = content;
+    });
+  });
+
+  </script>
+
+  <script src="../scripts/main.js"></script>
+</body>
+</html>

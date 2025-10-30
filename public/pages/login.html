@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gathrify - Login|Signup</title>
+
+    <!-- Corrected paths -->
+    <link rel="icon" href="../images/image.png" type="image/png" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/login.css" />
+   <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+  apiKey: "AIzaSyBXTdfKN9ZhC-INQVukxB7Twyh1trCZf8A",
+  authDomain: "gathrify-644e8.firebaseapp.com",
+  projectId: "gathrify-644e8",
+  storageBucket: "gathrify-644e8.firebasestorage.app",
+  messagingSenderId: "703401797587",
+  appId: "1:703401797587:web:bacd2ac2439de36e54b126",
+  measurementId: "G-R4NJGJJ34J"
+};
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+
+
+    
+
+
+  </head>
+
+  <body>
+    <div class="container">
+
+      <!-- Login Form -->
+      <div class="form-box login">
+        <form action="">
+          <h1>Login</h1>
+          <div class="input-box">
+            <input type="text" id="login-email" placeholder="E-mail" required />
+            <i class='bx bxs-user'></i>
+          </div>
+          <div class="input-box">
+            <input type="password" id="login-password" placeholder="Password" required />
+            <i class='bx bxs-lock-alt'></i>
+          </div>
+          <div class="forgot-link">
+            <a href="#">Forgot password?</a>
+          </div>
+          <button type="submit" id="login-btn" class="btn">Login</button>
+         
+         
+            <p>Or login with social platforms</p>
+          <div class="social-icons">
+            <a href="#" id="google-login-btn"><i class='bx bxl-google'></i></a>
+            
+            <!-- <a href="#"><i class='bx bxl-facebook'></i></a> -->
+          </div>
+          <footer>
+            <a href="privacy.html" id="law">Privacy Policy</a> |
+            <a href="terms.html" id="law">Terms of Service</a>
+          </footer>
+        </form>
+      </div>
+
+      <!-- Registration Form -->
+      <div class="form-box register">
+        <form action="">
+          <h1>Register with Us</h1>
+          <div class="input-box">
+          </div>
+          <div class="input-box">
+            <input type="text" id="signup-email" placeholder="Email" required />
+            <i class='bx bxs-user'></i>
+          </div>
+          <div class="input-box">
+            <input type="password" id="signup-password" placeholder=" Set Password" required />
+            <i class='bx bxs-lock-alt'></i>
+            <button id="resend-verification-btn">Resend Verification Email</button>
+
+            
+          </body>
+
+          </div>
+          <button type="submit" id="signup-btn" class="btn">Register</button>
+          
+          <footer>
+            <a href="privacy.html" id="law">Privacy Policy</a> |
+            <a href="terms.html" id="law">Terms of Service</a>
+          </footer>
+        </form>
+      </div>
+
+      <!-- Toggle Section -->
+      <div class="toggle-box">
+        <div class="toggle-panel toggle-left">
+          <h1 id="msg">Welcome To Gathrify !</h1>
+          <p>Don't have an account?</p>
+          <button class="btn register-btn">Register</button>
+        </div>
+        <div class="toggle-panel toggle-right">
+          <h1 id="msg">Welcome to Gathrify !</h1>
+          <p>Already have an account?</p>
+          <button class="btn login-btn">Login</button>
+         
+        </div>
+        
+      </div>
+    </div>
+  
+    
+
+    <!-- Corrected script path -->
+    <script type="module" src="../scripts/auth.js"></script>
+
+   <script src="../scripts/login.js"></script>
+    
+  </body>
+</html>
