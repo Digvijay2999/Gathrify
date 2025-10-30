@@ -9,18 +9,21 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
 
-// ✅ Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyBXTdfKN9ZhC-INQVukxB7Twyh1trCZf8A",
-  authDomain: "gathrify-644e8.firebaseapp.com",
-  projectId: "gathrify-644e8",
-  storageBucket: "gathrify-644e8.appspot.com",
-  messagingSenderId: "703401797587",
-  appId: "1:703401797587:web:bacd2ac2439de36e54b126",
-  measurementId: "G-R4NJGJJ34J"
-};
+// Fetch Firebase Config and Initialize
+let app;
 
-// 🔧 Initialize Firebase
+async function initializeFirebase() {
+  try {
+    const response = await fetch('/api/firebase-config');
+    const firebaseConfig = await response.json();
+    app = initializeApp(firebaseConfig);
+  } catch (error) {
+    console.error('Error initializing Firebase:', error);
+  }
+}
+
+// Initialize Firebase
+await initializeFirebase();
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
@@ -96,3 +99,4 @@ document.getElementById("resend-verification-btn").addEventListener("click", () 
     alert("You must be logged in to resend the verification email.");
   }
 });
+
